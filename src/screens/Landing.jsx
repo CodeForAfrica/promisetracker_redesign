@@ -28,7 +28,7 @@ export default function Landing() {
     </div>
 
     
-    <div style={sx("flex:none;width:440px;max-width:100%")}>
+    <div style={sx("flex:none;width:var(--herocard);max-width:100%")}>
       <div style={sx("display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 12px")}>
         <p style={sx("margin:0;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.72)")}>What a tracked promise looks like</p>
         <div style={sx("display:flex;align-items:center;gap:8px;flex:none")}>
