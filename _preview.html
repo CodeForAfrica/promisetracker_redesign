@@ -19,9 +19,9 @@
 <script>
 /* Development harness only — it runs the real src/ files with an in-browser
    transpiler and a minimal router shim, so the port can be reviewed without
-   `npm install`. The shipped app uses Vite + @tanstack/react-router (src/main.jsx). */
+   installing anything. The shipped app uses Vite + @tanstack/react-router (src/main.jsx). */
 const FILES = [
-  'src/lib/sx.js','src/lib/model.js','src/lib/vals.jsx','src/config.js','src/routes/RootLayout.jsx',
+  'src/lib/sx.js','src/lib/asset.js','src/lib/useMediaQuery.js','src/lib/model.js','src/lib/vals.jsx','src/config.js','src/routes/RootLayout.jsx',
   'src/components/SiteHeader.jsx','src/components/SiteFooter.jsx','src/components/Subscribe.jsx',
   'src/components/StatusTooltip.jsx','src/components/Lightbox.jsx','src/components/ActionModals.jsx',
   'src/screens/Landing.jsx','src/screens/Officials.jsx','src/screens/Profile.jsx','src/screens/Promises.jsx',
@@ -79,8 +79,10 @@ function req(spec, from){
 (async () => {
   for (const f of FILES){
     let src = await (await fetch('./' + f)).text();
-    // Vite serves public/ at the site root; this harness is served from app/, so remap.
-    src = src.split('/assets/').join('./public/assets/');
+    // Vite serves public/ at the base path and defines import.meta.env; this
+    // harness has neither, so point the asset helper at public/ directly.
+    src = src.split('import.meta.env.BASE_URL').join("'./public/'");
+    src = src.split("'/assets/").join("'./public/assets/");
     const code = Babel.transform(src, {
       filename: f,
       presets: [['env', { modules: 'commonjs', targets: { chrome: '100' } }], 'react']

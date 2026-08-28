@@ -2,16 +2,23 @@
 
 A working export of the PromiseTracker design prototype as a real front-end app.
 
+Live at **<https://codeforafrica.github.io/promisetracker_redesign/>**.
+
 ```bash
-cd app
-npm install
-npm run dev      # http://localhost:5173
-npm run build    # -> dist/
+pnpm install
+pnpm dev      # http://localhost:5173/promisetracker_redesign/
+pnpm build    # -> dist/
+pnpm preview  # serve dist/ locally
+pnpm deploy   # build + publish to the gh-pages branch
 ```
 
+The dev server runs under the same `/promisetracker_redesign/` base path as the
+deployed site, so a broken asset URL shows up locally rather than in production.
+
 `_preview.html` runs the same `src/` files with an in-browser transpiler and a
-minimal router shim, so the port can be reviewed without installing anything.
-It is a development harness, not part of the build.
+minimal router shim, so the port can be reviewed without installing anything —
+serve the repo root over HTTP (`python3 -m http.server`) and open it, since it
+fetches the sources. It is a development harness, not part of the build.
 
 ## Routes
 
@@ -47,6 +54,8 @@ src/
   lib/model.js          data (officials, promises, petitions) + pure helpers
   lib/vals.jsx          ValsProvider, useVals(), and the ported view logic
   lib/sx.js             CSS declaration string -> React style object
+  lib/asset.js          public/ URLs prefixed with the deployment base path
+  lib/useMediaQuery.js  the CSS breakpoints, readable from JS
   styles/base.css       resets, font stack, responsive custom properties
   styles/hover.css      generated hover rules
 public/assets/          logos, partner marks, official photographs
@@ -70,6 +79,50 @@ Results are memoised per string.
 **`styles/hover.css`** carries the hover states. Base styles are inline, so hover
 rules are generated classes (`hv0`…`hv31`) with `!important` to win over the
 inline declarations. Elements that need one carry the class.
+
+## Responsive layout
+
+Because the markup is styled inline, media queries cannot reach it directly.
+`styles/base.css` declares the layout numbers as custom properties on `:root` and
+redefines them at three breakpoints — 1024px, 900px, 760px — so the JSX carries
+`gap:var(--gap)` or `min-width:var(--heromin)` and the breakpoint decides the
+value. Adding a responsive rule usually means adding a variable, not a class.
+
+A few places have to change *shape* rather than size — the header nav becomes a
+drawer, the officials filter tabs become a dropdown, the profile chart moves its
+labels below the bar. Those read the same 760px breakpoint from JS via
+`useIsMobile()` in `lib/useMediaQuery.js`, and branch on it.
+
+## Deployment
+
+The site is published to GitHub Pages from the `gh-pages` branch, by hand:
+
+```bash
+pnpm deploy
+```
+
+That runs `vite build` and pushes `dist/` to `gh-pages` with the `gh-pages`
+package. Nothing deploys on push to `main` — publishing is an explicit step.
+
+Three details make a Vite SPA work on Pages, all already set up:
+
+- **Base path.** Pages serves the app from a repo subdirectory, so
+  `vite.config.js` sets `base: '/promisetracker_redesign/'`. Vite rewrites asset
+  URLs in HTML and CSS, but not ones built as strings in JS — those go through
+  `asset()` in `lib/asset.js`. The router reads the same value as its `basepath`.
+  Moving to a custom domain at the root means changing `base` to `'/'`; the rest
+  follows from it.
+- **SPA fallback.** Pages has no rewrite rule, so a deep link like
+  `/kenya/officials/ruto` is a genuine 404. A plugin in `vite.config.js` copies
+  `index.html` to `404.html` at build time; Pages serves that document, the
+  address bar is left intact, and the router picks the URL up. Deep links do
+  return a 404 *status* — that is normal for this pattern and does not affect
+  rendering.
+- **`.nojekyll`.** Branch-served Pages runs Jekyll, which drops files it treats
+  as private. The same plugin writes the marker file that turns it off.
+
+The one-time repo setting is Settings → Pages → Source: *Deploy from a branch*,
+branch `gh-pages`, folder `/ (root)`.
 
 ## What is deliberately still open
 
