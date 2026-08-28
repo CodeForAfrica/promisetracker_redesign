@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PromiseTracker — port preview (no build step)</title>
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./src/styles/base.css">
+<link rel="stylesheet" href="./src/styles/hover.css">
+<style>#boot{font:14px Inter,system-ui,sans-serif;color:#8b9099;padding:40px}</style>
+</head>
+<body>
+<div id="root"><div id="boot">Transpiling the app in the browser…</div></div>
+<script>
+/* Development harness only — it runs the real src/ files with an in-browser
+   transpiler and a minimal router shim, so the port can be reviewed without
+   `npm install`. The shipped app uses Vite + @tanstack/react-router (src/main.jsx). */
+const FILES = [
+  'src/lib/sx.js','src/lib/model.js','src/lib/vals.jsx','src/config.js','src/routes/RootLayout.jsx',
+  'src/components/SiteHeader.jsx','src/components/SiteFooter.jsx','src/components/Subscribe.jsx',
+  'src/components/StatusTooltip.jsx','src/components/Lightbox.jsx','src/components/ActionModals.jsx',
+  'src/screens/Landing.jsx','src/screens/Officials.jsx','src/screens/Profile.jsx','src/screens/Promises.jsx',
+  'src/screens/PromiseDetail.jsx','src/screens/ActNow.jsx','src/screens/About.jsx','src/screens/Methodology.jsx'
+];
+const ROUTES = [
+  [/^\/$/, 'src/screens/Landing.jsx'],
+  [/^\/kenya\/officials\/[^/]+\/promises$/, 'src/screens/Promises.jsx'],
+  [/^\/kenya\/officials\/[^/]+$/, 'src/screens/Profile.jsx'],
+  [/^\/kenya\/promises\/[^/]+$/, 'src/screens/PromiseDetail.jsx'],
+  [/^\/kenya$/, 'src/screens/Officials.jsx'],
+  [/^\/act$/, 'src/screens/ActNow.jsx'],
+  [/^\/methodology$/, 'src/screens/Methodology.jsx'],
+  [/^\/about$/, 'src/screens/About.jsx']
+];
+
+function dirname(p){ return p.slice(0, p.lastIndexOf('/')); }
+function resolve(from, spec){
+  if (!spec.startsWith('.')) return spec;
+  const st = [];
+  for (const s of (dirname(from) + '/' + spec).split('/')){
+    if (s === '.' || s === '') continue;
+    if (s === '..') st.pop(); else st.push(s);
+  }
+  let p = st.join('/');
+  if (!/\.(jsx?|css)$/.test(p)) p = FILES.find(f => f === p + '.js' || f === p + '.jsx') || p;
+  return p;
+}
+
+let setPathExternal = null;
+let currentPath = '/';
+const RouterShim = {
+  Outlet: () => {
+    const hit = ROUTES.find(([re]) => re.test(currentPath));
+    const Screen = hit ? req(hit[1]).default : null;
+    return Screen ? React.createElement(Screen) : null;
+  },
+  useNavigate: () => ((opts) => { if (setPathExternal) setPathExternal(opts.to); }),
+  useRouterState: ({ select }) => select({ location: { pathname: currentPath } })
+};
+
+const factories = {}, cache = {};
+function req(spec, from){
+  if (spec === 'react') return React;
+  if (spec === '@tanstack/react-router') return RouterShim;
+  const p = resolve(from || '', spec);
+  if (p.endsWith('.css')) return {};
+  if (cache[p]) return cache[p].exports;
+  const mod = { exports: {} };
+  cache[p] = mod;
+  factories[p](mod, mod.exports, (s) => req(s, p));
+  return mod.exports;
+}
+
+(async () => {
+  for (const f of FILES){
+    let src = await (await fetch('./' + f)).text();
+    // Vite serves public/ at the site root; this harness is served from app/, so remap.
+    src = src.split('/assets/').join('./public/assets/');
+    const code = Babel.transform(src, {
+      filename: f,
+      presets: [['env', { modules: 'commonjs', targets: { chrome: '100' } }], 'react']
+    }).code;
+    factories[f] = new Function('module', 'exports', 'require', code);
+  }
+  const RootLayout = req('src/routes/RootLayout.jsx').default;
+
+  function Harness(){
+    const [path, setPath] = React.useState(location.hash.slice(1) || '/');
+    currentPath = path;
+    setPathExternal = (p) => { location.hash = p; setPath(p); };
+    React.useEffect(() => {
+      const onHash = () => setPath(location.hash.slice(1) || '/');
+      window.addEventListener('hashchange', onHash);
+      return () => window.removeEventListener('hashchange', onHash);
+    }, []);
+    return React.createElement(RootLayout);
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(Harness));
+})();
+</script>
+</body>
+</html>
