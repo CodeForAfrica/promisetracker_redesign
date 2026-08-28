@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { config } from '../config';
+import { assetUrl } from './asset';
 import {
   INITIAL_STATE,
   ORDER,
@@ -467,12 +468,12 @@ function computeVals(S, set, props, searchRef, nav, route) {
         go: t.key === 'meth' ? goMeth : (() => { set({ aboutTab: t.key }); window.scrollTo(0, 0); })
       })),
       U_partners: [
-        { n: 'PesaCheck', img: 'url("assets/partner-pesacheck.png")', url: 'https://pesacheck.org' },
-        { n: 'The Star', img: 'url("assets/partner-star.png")', url: 'https://www.the-star.co.ke' },
-        { n: 'Piga Firimbi', img: 'url("assets/partner-pigafirimbi.png")', url: 'https://pigafirimbi.africauncensored.online' },
-        { n: 'DW Akademie', img: 'url("assets/partner-dwakademie.png")', url: 'https://www.dw.com/en/dw-akademie/s-8120' },
-        { n: 'Meedan', img: 'url("assets/partner-meedan.png")', url: 'https://meedan.com' },
-        { n: 'AWS', img: 'url("assets/partner-aws.png")', url: 'https://aws.amazon.com' },
+        { n: 'PesaCheck', img: assetUrl('assets/partner-pesacheck.png'), url: 'https://pesacheck.org' },
+        { n: 'The Star', img: assetUrl('assets/partner-star.png'), url: 'https://www.the-star.co.ke' },
+        { n: 'Piga Firimbi', img: assetUrl('assets/partner-pigafirimbi.png'), url: 'https://pigafirimbi.africauncensored.online' },
+        { n: 'DW Akademie', img: assetUrl('assets/partner-dwakademie.png'), url: 'https://www.dw.com/en/dw-akademie/s-8120' },
+        { n: 'Meedan', img: assetUrl('assets/partner-meedan.png'), url: 'https://meedan.com' },
+        { n: 'AWS', img: assetUrl('assets/partner-aws.png'), url: 'https://aws.amazon.com' },
       ],
 
       // landing
@@ -496,12 +497,12 @@ function computeVals(S, set, props, searchRef, nav, route) {
       L_countries: countries,
       L_legend: ORDER.map(k => ({ label: LAB[k], color: pal[k], tipEnter: tipOn(k), tipLeave: tipOff })),
       L_partners: [
-        { n: 'PesaCheck', img: 'url("assets/partner-pesacheck.png")' },
-        { n: 'The Star', img: 'url("assets/partner-star.png")' },
-        { n: 'Piga Firimbi', img: 'url("assets/partner-pigafirimbi.png")' },
-        { n: 'DW Akademie', img: 'url("assets/partner-dwakademie.png")' },
-        { n: 'Meedan', img: 'url("assets/partner-meedan.png")' },
-        { n: 'AWS', img: 'url("assets/partner-aws.png")' }
+        { n: 'PesaCheck', img: assetUrl('assets/partner-pesacheck.png') },
+        { n: 'The Star', img: assetUrl('assets/partner-star.png') },
+        { n: 'Piga Firimbi', img: assetUrl('assets/partner-pigafirimbi.png') },
+        { n: 'DW Akademie', img: assetUrl('assets/partner-dwakademie.png') },
+        { n: 'Meedan', img: assetUrl('assets/partner-meedan.png') },
+        { n: 'AWS', img: assetUrl('assets/partner-aws.png') }
       ],
 
       // politicians

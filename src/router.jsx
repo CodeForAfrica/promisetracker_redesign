@@ -30,6 +30,8 @@ const routes = [
 
 export const router = createRouter({
   routeTree: rootRoute.addChildren(routes),
+  /* Matches Vite's base so the router ignores the GitHub Pages subdirectory. */
+  basepath: import.meta.env.BASE_URL,
   defaultPreload: 'intent',
   scrollRestoration: true
 });

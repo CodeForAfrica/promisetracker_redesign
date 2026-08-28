@@ -1,5 +1,6 @@
 import React from 'react';
 import { sx } from '../lib/sx';
+import { asset } from '../lib/asset';
 import { useVals } from '../lib/vals';
 import { useIsMobile } from '../lib/useMediaQuery';
 
@@ -50,7 +51,7 @@ export default function SiteHeader() {
 <header style={sx("position:sticky;top:0;z-index:60;background:#FFFFFF;border-bottom:1px solid #ededf0")}>
   <div style={sx("max-width:1280px;margin:0 auto;padding:var(--hpad) var(--gut);min-height:64px;height:var(--hh);display:flex;align-items:center;flex-wrap:var(--hwrap);gap:clamp(14px,2vw,28px)")}>
     <div style={sx("display:flex;align-items:center;gap:14px;flex:1;min-width:0")}>
-      <button onClick={goHome} style={sx("display:flex;align-items:center;flex:none")}><img src="/assets/logo.png" alt="PromiseTracker" style={sx("height:19px;display:block")} /></button>
+      <button onClick={goHome} style={sx("display:flex;align-items:center;flex:none")}><img src={asset('assets/logo.png')} alt="PromiseTracker" style={sx("height:19px;display:block")} /></button>
       {(crumbCountry) ? (<>
         <span style={sx("color:#D0D0D0;font-size:14px")}>/</span>
         <button className="hv24" onClick={goCountry} style={sx("font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#121212;white-space:nowrap")}>{crumbCountry}</button>

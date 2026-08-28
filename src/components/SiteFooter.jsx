@@ -1,5 +1,6 @@
 import React from 'react';
 import { sx } from '../lib/sx';
+import { asset } from '../lib/asset';
 import { useVals } from '../lib/vals';
 import { useIsMobile } from '../lib/useMediaQuery';
 
@@ -46,12 +47,12 @@ export default function SiteFooter() {
       <footer style={sx("background:#FFFFFF;padding:40px 0 32px")}>
         <div style={sx("max-width:1280px;margin:0 auto;padding:0 var(--gut)")}>
           <div style={sx("display:flex;align-items:center;justify-content:space-between;gap:16px")}>
-            <img src="/assets/logo.png" alt="PromiseTracker" style={sx("height:26px;display:block")} />
+            <img src={asset('assets/logo.png')} alt="PromiseTracker" style={sx("height:26px;display:block")} />
             {badge(76)}
           </div>
           <div style={sx("display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:20px")}>
             <span style={sx("font-size:12px;color:#6b7078")}>An initiative of:</span>
-            <img src="/assets/code-for-africa.svg" alt="Code for Africa" style={sx("height:24px;max-width:100%;display:block")} />
+            <img src={asset('assets/code-for-africa.svg')} alt="Code for Africa" style={sx("height:24px;max-width:100%;display:block")} />
           </div>
           <p style={sx("margin:16px 0 0;font-size:13px;line-height:1.65;color:#6b7078;text-wrap:pretty")}>{BLURB}</p>
 
@@ -91,9 +92,9 @@ export default function SiteFooter() {
     <div style={sx("display:flex;justify-content:space-between;flex-wrap:var(--wrap);gap:clamp(24px,3vw,40px);align-items:flex-start;padding-bottom:34px")}>
       <div style={sx("min-width:0;flex:1")}>
         <div style={sx("display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px")}>
-          <img src="/assets/logo.png" alt="PromiseTracker" style={sx("height:24px;max-width:100%;display:block")} />
+          <img src={asset('assets/logo.png')} alt="PromiseTracker" style={sx("height:24px;max-width:100%;display:block")} />
           <span style={sx("font-size:12px;color:#6b7078")}>An initiative of:</span>
-          <img src="/assets/code-for-africa.svg" alt="Code for Africa" style={sx("height:26px;max-width:100%;display:block")} />
+          <img src={asset('assets/code-for-africa.svg')} alt="Code for Africa" style={sx("height:26px;max-width:100%;display:block")} />
         </div>
         <p style={sx("margin:0;max-width:620px;font-size:13px;line-height:1.6;color:#6b7078")}>{BLURB}</p>
       </div>

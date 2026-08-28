@@ -1,3 +1,4 @@
+import { asset } from './asset';
 // Data and pure helpers, ported verbatim from the HTML design prototype.
 
 export const INITIAL_STATE = {
@@ -39,14 +40,14 @@ export function statusPaletteDark(mode) {
   }
 
 export const POLS = [
-    { id:'ruto', n:'William Ruto', init:'WR', photo:'/assets/pol-ruto.png', role:'President', grp:'President', region:'Republic of Kenya', party:'UDA · Kenya Kwanza', since:'Sep 2022', term:'2022–2027', upd:'Jun 28, 2026', key:'r2' },
-    { id:'sakaja', n:'Johnson Sakaja', init:'JS', photo:'/assets/pol-sakaja.webp', role:'Governor', grp:'Governors', region:'Nairobi City County', party:'UDA', since:'Aug 2022', term:'2022–2027', upd:'Jun 21, 2026', key:'s1' },
-    { id:'waiguru', n:'Anne Waiguru', init:'AW', photo:'/assets/pol-waiguru.png', role:'Governor', grp:'Governors', region:'Kirinyaga County', party:'UDA', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'May 30, 2026', key:'w2' },
-    { id:'wanga', n:'Gladys Wanga', init:'GW', photo:'/assets/pol-wanga.jpg', role:'Governor', grp:'Governors', region:'Homa Bay County', party:'ODM', since:'Aug 2022', term:'2022–2027', upd:'Jun 09, 2026', key:'h1' },
-    { id:'olekina', n:'Ledama Olekina', init:'LO', photo:'/assets/pol-olekina.webp', role:'Senator', grp:'Senators', region:'Narok County', party:'ODM', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'Apr 18, 2026', key:'o1' },
-    { id:'cheruiyot', n:'Aaron Cheruiyot', init:'AC', photo:'/assets/pol-cheruiyot.webp', role:'Senator', grp:'Senators', region:'Kericho County', party:'UDA', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'May 12, 2026', key:'c1' },
-    { id:'ichungwah', n:"Kimani Ichung'wah", init:'KI', photo:'/assets/pol-ichungwah.jpg', role:'MP · Majority Leader', grp:'MPs', region:'Kikuyu Constituency', party:'UDA', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'Jun 02, 2026', key:'i1' },
-    { id:'passaris', n:'Esther Passaris', init:'EP', photo:'/assets/pol-passaris.png', role:'Woman Representative', grp:'MPs', region:'Nairobi City County', party:'ODM', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'May 25, 2026', key:'e2' }
+    { id:'ruto', n:'William Ruto', init:'WR', photo:asset('assets/pol-ruto.png'), role:'President', grp:'President', region:'Republic of Kenya', party:'UDA · Kenya Kwanza', since:'Sep 2022', term:'2022–2027', upd:'Jun 28, 2026', key:'r2' },
+    { id:'sakaja', n:'Johnson Sakaja', init:'JS', photo:asset('assets/pol-sakaja.webp'), role:'Governor', grp:'Governors', region:'Nairobi City County', party:'UDA', since:'Aug 2022', term:'2022–2027', upd:'Jun 21, 2026', key:'s1' },
+    { id:'waiguru', n:'Anne Waiguru', init:'AW', photo:asset('assets/pol-waiguru.png'), role:'Governor', grp:'Governors', region:'Kirinyaga County', party:'UDA', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'May 30, 2026', key:'w2' },
+    { id:'wanga', n:'Gladys Wanga', init:'GW', photo:asset('assets/pol-wanga.jpg'), role:'Governor', grp:'Governors', region:'Homa Bay County', party:'ODM', since:'Aug 2022', term:'2022–2027', upd:'Jun 09, 2026', key:'h1' },
+    { id:'olekina', n:'Ledama Olekina', init:'LO', photo:asset('assets/pol-olekina.webp'), role:'Senator', grp:'Senators', region:'Narok County', party:'ODM', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'Apr 18, 2026', key:'o1' },
+    { id:'cheruiyot', n:'Aaron Cheruiyot', init:'AC', photo:asset('assets/pol-cheruiyot.webp'), role:'Senator', grp:'Senators', region:'Kericho County', party:'UDA', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'May 12, 2026', key:'c1' },
+    { id:'ichungwah', n:"Kimani Ichung'wah", init:'KI', photo:asset('assets/pol-ichungwah.jpg'), role:'MP · Majority Leader', grp:'MPs', region:'Kikuyu Constituency', party:'UDA', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'Jun 02, 2026', key:'i1' },
+    { id:'passaris', n:'Esther Passaris', init:'EP', photo:asset('assets/pol-passaris.png'), role:'Woman Representative', grp:'MPs', region:'Nairobi City County', party:'ODM', since:'Aug 2017', term:'2022–2027 · 2nd term', upd:'May 25, 2026', key:'e2' }
   ];
 
 export const PROMS = [
