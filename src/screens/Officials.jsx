@@ -1,9 +1,15 @@
 import React from 'react';
 import { sx } from '../lib/sx';
 import { useVals } from '../lib/vals';
+import { useIsMobile } from '../lib/useMediaQuery';
 
 export default function Officials() {
   const { P_dist, P_feat, P_rows, P_sub, P_tabs, goHome } = useVals();
+  const isMobile = useIsMobile();
+  const [filterOpen, setFilterOpen] = React.useState(false);
+  const active = (P_tabs || []).find(t => t.on) || (P_tabs || [])[0] || { label: '', count: 0 };
+
+  React.useEffect(() => { if (!isMobile) setFilterOpen(false); }, [isMobile]);
 
   return (
     <>
@@ -55,17 +61,40 @@ export default function Officials() {
     </div>
    </div>
   </div>
+  {(!isMobile) ? (<>
   <div style={sx("display:flex;gap:28px;border-bottom:1px solid #e4e5e8;margin-top:36px")}>
     {(P_tabs || []).map((t, $index) => (<React.Fragment key={$index}>
       <button className="hv8" onClick={t.go} style={sx(`padding:13px 2px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${t.c};border-bottom:2px solid ${t.ul};margin-bottom:-1px;white-space:nowrap;flex:none`)}>{t.label} <span style={sx("font-weight:500;color:#8b9099;font-feature-settings:'tnum' 1")}>{t.count}</span></button>
     </React.Fragment>))}
   </div>
+  </>) : (<>
+  <div style={sx("position:relative;z-index:20;margin-top:26px;padding-bottom:14px;border-bottom:1px solid #e4e5e8")}>
+    <button className="hv19" onClick={() => setFilterOpen(v => !v)} aria-expanded={filterOpen} style={sx("display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;border:1px solid #e4e5e8;border-radius:10px;padding:12px 14px;background:#FFFFFF;transition:border-color 0.15s ease")}>
+      <span style={sx("display:flex;align-items:baseline;gap:8px;min-width:0")}>
+        <span style={sx("font-size:10px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#8b9099;flex:none")}>Filter</span>
+        <span style={sx("font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#121212;overflow:hidden;text-overflow:ellipsis;white-space:nowrap")}>{active.label}</span>
+        <span style={sx("font-size:12px;color:#8b9099;font-feature-settings:'tnum' 1;flex:none")}>{active.count}</span>
+      </span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7078" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={sx(`flex:none;transform:rotate(${filterOpen ? '180deg' : '0deg'})`)}><path d="M6 9l6 6 6-6"></path></svg>
+    </button>
+    {(filterOpen) ? (<>
+      <div style={sx("position:absolute;left:0;right:0;top:56px;background:#FFFFFF;border:1px solid #e4e5e8;border-radius:10px;overflow:hidden;box-shadow:0 18px 36px -12px rgba(9,9,10,0.24);animation:ptFade 0.16s ease both")}>
+        {(P_tabs || []).map((t, $index) => (<React.Fragment key={$index}>
+          <button className="hv3" onClick={() => { setFilterOpen(false); t.go(); }} style={sx(`display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 14px;font-size:14px;font-weight:${t.on ? 700 : 500};color:${t.c};border-top:${$index === 0 ? 'none' : '1px solid #f0f1f3'}`)}>
+            {t.label}
+            <span style={sx("font-size:12px;color:#8b9099;font-feature-settings:'tnum' 1")}>{t.count}</span>
+          </button>
+        </React.Fragment>))}
+      </div>
+    </>) : null}
+  </div>
+  </>)}
   <div style={sx("padding-bottom:56px")}>
     {(P_rows || []).map((r, $index) => (<React.Fragment key={$index}>
-      <button className="hv3" onClick={r.go} style={sx("display:flex;align-items:center;gap:26px;width:100%;padding:24px 8px;border-bottom:1px solid #e4e5e8")}>
-        <span style={sx("width:64px;flex:none;display:flex;flex-direction:column")}>
-          {(r.photo) ? (<><span role="img" aria-label={r.name} style={sx(`width:64px;height:64px;border-radius:50%;background-image:${r.photoCss};background-size:cover;background-position:center top;background-color:#121212;display:block;flex:none`)}></span></>) : null}
-          {(r.noPhoto) ? (<><span style={sx("width:64px;height:64px;border-radius:50%;background:#121212;color:#FFFFFF;display:grid;place-items:center;font-size:19px;font-weight:800;letter-spacing:-0.01em")}>{r.init}</span></>) : null}
+      <button className="hv3" onClick={r.go} style={sx(`display:flex;align-items:${isMobile ? 'flex-start' : 'center'};gap:var(--polgap);width:100%;padding:var(--polpad);border-bottom:1px solid #e4e5e8`)}>
+        <span style={sx("width:var(--polav);flex:none;display:flex;flex-direction:column")}>
+          {(r.photo) ? (<><span role="img" aria-label={r.name} style={sx(`width:var(--polav);height:var(--polav);border-radius:50%;background-image:${r.photoCss};background-size:cover;background-position:center top;background-color:#121212;display:block;flex:none`)}></span></>) : null}
+          {(r.noPhoto) ? (<><span style={sx("width:var(--polav);height:var(--polav);border-radius:50%;background:#121212;color:#FFFFFF;display:grid;place-items:center;font-size:19px;font-weight:800;letter-spacing:-0.01em")}>{r.init}</span></>) : null}
           <span style={sx("display:flex;height:6px;margin-top:2px")}>
             {(r.segs || []).map((s, $index) => (<React.Fragment key={$index}>
               <span style={sx(`width:${s.w};height:100%;background:${s.color};margin-right:1px`)}></span>
@@ -73,14 +102,26 @@ export default function Officials() {
           </span>
         </span>
         <span style={sx("flex:1;display:flex;flex-direction:column;gap:5px;min-width:0")}>
-          <span style={sx("font-size:23px;font-weight:700;letter-spacing:-0.02em")}>{r.name}</span>
-          <span style={sx("font-size:13px;color:#6b7078")}>{r.meta}</span>
+          <span style={sx("font-size:var(--polname);font-weight:700;letter-spacing:-0.02em;text-wrap:pretty")}>{r.name}</span>
+          <span style={sx("font-size:13px;color:#6b7078;text-wrap:pretty")}>{r.meta}</span>
+          {/* Below the tab breakpoint the three trailing columns leave the name a
+              single word wide, so the tallies move onto their own line instead. */}
+          {(isMobile) ? (<>
+            <span style={sx("display:flex;align-items:baseline;gap:8px;margin-top:5px;font-feature-settings:'tnum' 1")}>
+              <span style={sx("font-size:13px;font-weight:800;color:#121212")}>{r.count}</span>
+              <span style={sx("font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8b9099")}>promises</span>
+              <span style={sx("display:block;flex:none;width:1px;height:10px;background:#d5d7dc")}></span>
+              <span style={sx(`font-size:13px;font-weight:700;color:${r.keptC}`)}>{r.kept} kept</span>
+            </span>
+          </>) : null}
         </span>
-        <span style={sx("display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none")}>
-          <span style={sx("font-size:22px;font-weight:800;font-feature-settings:'tnum' 1;letter-spacing:-0.02em")}>{r.count}</span>
-          <span style={sx("font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8b9099")}>promises</span>
-        </span>
-        <span style={sx(`width:86px;flex:none;text-align:right;font-size:14px;font-weight:700;color:${r.keptC};font-feature-settings:'tnum' 1`)}>{r.kept} kept</span>
+        {(!isMobile) ? (<>
+          <span style={sx("display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none")}>
+            <span style={sx("font-size:22px;font-weight:800;font-feature-settings:'tnum' 1;letter-spacing:-0.02em")}>{r.count}</span>
+            <span style={sx("font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8b9099")}>promises</span>
+          </span>
+          <span style={sx(`width:86px;flex:none;text-align:right;font-size:14px;font-weight:700;color:${r.keptC};font-feature-settings:'tnum' 1`)}>{r.kept} kept</span>
+        </>) : null}
       </button>
     </React.Fragment>))}
   </div>

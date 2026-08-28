@@ -1,9 +1,11 @@
 import React from 'react';
 import { sx } from '../lib/sx';
 import { useVals } from '../lib/vals';
+import { useIsMobile } from '../lib/useMediaQuery';
 
 export default function Profile() {
   const { F_dataChev, F_dataLabel, F_dataToggle, F_follow, F_followBd, F_followBg, F_followC, F_followL, F_goAll, F_groups, F_headline, F_hideData, F_init, F_keyColor, F_keyGo, F_keyImgCss, F_keyStatus, F_keyTerm, F_keyTitle, F_keyWhy, F_latest, F_legend, F_metaBot, F_metaTop, F_name, F_noPhoto, F_photo, F_photoCss, F_seeAll, F_segs, F_share, F_shareL, F_showData, goCountry } = useVals();
+  const isMobile = useIsMobile();
 
   return (
     <>
@@ -38,17 +40,30 @@ export default function Profile() {
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={sx(`transform:${F_dataChev}`)}><path d="M6 9l6 6 6-6"></path></svg>
         </button>
       </div>
-      <div style={sx("display:flex;height:76px;margin-top:26px")}>
+      <div style={sx("display:flex;height:var(--chh);margin-top:26px")}>
         {(F_segs || []).map((s, $index) => (<React.Fragment key={$index}>
           <button className="hv9" onClick={s.go} onMouseEnter={s.tipEnter} onMouseLeave={s.tipLeave} style={sx(`width:${s.w};height:100%;background:${s.color};margin-right:2px;position:relative`)}></button>
         </React.Fragment>))}
       </div>
-      {(F_hideData) ? (<>
+      {(F_hideData && !isMobile) ? (<>
       <div style={sx("display:flex;margin-top:0")}>
         {(F_groups || []).map((g, $index) => (<React.Fragment key={$index}>
           <span style={sx(`width:${g.w};border-top:2px solid ${g.color};border-left:1px solid #e4e5e8;padding:10px 0 0 10px;margin-right:2px`)}>
             <span style={sx(`display:block;font-size:11px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:${g.color}`)}>{g.label}</span>
             <span style={sx("display:block;font-size:12.5px;color:#8b9099;margin-top:2px;font-feature-settings:'tnum' 1")}>{g.pct}</span>
+          </span>
+        </React.Fragment>))}
+      </div>
+      </>) : null}
+      {(F_hideData && isMobile) ? (<>
+      {/* The proportional captions collide once a band is only a few pixels wide,
+          so on phones the same numbers are listed under the bar instead. */}
+      <div style={sx("display:flex;flex-direction:column;margin-top:14px")}>
+        {(F_groups || []).map((g, $index) => (<React.Fragment key={$index}>
+          <span style={sx("display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #ededf0")}>
+            <span style={sx(`display:block;flex:none;width:10px;height:10px;background:${g.color}`)}></span>
+            <span style={sx(`flex:1;min-width:0;font-size:11px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:${g.color}`)}>{g.label}</span>
+            <span style={sx("flex:none;font-size:13px;font-weight:700;color:#121212;font-feature-settings:'tnum' 1")}>{g.pct}</span>
           </span>
         </React.Fragment>))}
       </div>

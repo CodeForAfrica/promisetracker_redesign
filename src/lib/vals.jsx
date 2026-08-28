@@ -207,7 +207,7 @@ function computeVals(S, set, props, searchRef, nav, route) {
     const tabs = grps.map(g => {
       const n = g === 'All' ? POLS.length : POLS.filter(p => p.grp === g).length;
       const on = S.grp === g;
-      return { label: g, count: n, c: on ? '#121212' : '#6b7078', ul: on ? '#121212' : 'transparent', go: () => set({ grp: g }) };
+      return { label: g, count: n, on, c: on ? '#121212' : '#6b7078', ul: on ? '#121212' : 'transparent', go: () => set({ grp: g }) };
     });
     const P_dist = ORDER.filter(k => keCounts[k] > 0).map(k => ({
       label: LAB[k], color: pal[k], n: keCounts[k],

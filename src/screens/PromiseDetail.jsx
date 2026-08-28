@@ -47,7 +47,7 @@ export default function PromiseDetail() {
 
   
   <div style={sx("display:flex;gap:var(--gapmid);align-items:flex-start;flex-wrap:var(--wrap);margin-top:34px")}>
-    <figure style={sx("margin:0;flex:1.35;min-width:0")}>
+    <figure style={sx("margin:0;flex:1.35;min-width:var(--pdfig)")}>
       <button className="hv18" onClick={D_imgGo} aria-label={D_imgAlt} style={sx(`display:block;width:100%;aspect-ratio:16/9;border-radius:12px;background-color:#eceef1;background-image:${D_imgCss};background-size:cover;background-position:center;transition:opacity 0.18s ease`)}></button>
       <figcaption style={sx("display:flex;justify-content:space-between;gap:16px;margin-top:10px;font-size:11.5px;line-height:1.5;color:#8b9099")}>
         <span>{D_imgCap}</span>
